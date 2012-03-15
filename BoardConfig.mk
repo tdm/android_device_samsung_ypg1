@@ -34,7 +34,7 @@ TARGET_PROVIDES_INIT_TARGET_RC := true
 TARGET_RECOVERY_INITRC := device/samsung/ypg1/recovery.rc
 
 # Provide our own libaudio
-TARGET_PROVIDES_LIBAUDIO := true
+#TARGET_PROVIDES_LIBAUDIO := true
 
 # Releasetools
 TARGET_RELEASETOOL_OTA_FROM_TARGET_SCRIPT := ./device/samsung/ypg1/releasetools/ypg1_ota_from_target_files
@@ -92,8 +92,14 @@ WIFI_DRIVER_MODULE_NAME := "dhd"
 TARGET_USERIMAGES_USE_EXT4 := true
 BOARD_RECOVERY_HANDLES_MOUNT := true
 BOARD_USES_BML_OVER_MTD := false
-BOARD_CUSTOM_RECOVERY_KEYMAPPING:= ../../device/samsung/ypg1/recovery_ui.c
+#BOARD_CUSTOM_RECOVERY_KEYMAPPING:= ../../device/samsung/ypg1/recovery_ui.c
 BOARD_CUSTOM_BOOTIMG_MK := device/samsung/ypg1/shbootimg.mk
-TARGET_OTA_ASSERT_DEVICE := YP-G1
+TARGET_OTA_ASSERT_DEVICE := YP-G1,ypg1
 
--include device/samsung/aries-common/bdaddr_read/Android.mk
+# ICS settings
+DISABLE_DEXPREOPT := true
+COMMON_GLOBAL_CFLAGS += -DMISSING_EGL_EXTERNAL_IMAGE
+COMMON_GLOBAL_CFLAGS += -DMISSING_GRALLOC_BUFFERS
+COMMON_GLOBAL_CFLAGS += -DMISSING_EGL_PIXEL_FORMAT_YV12
+
+BOARD_USE_LEGACY_TOUCHSCREEN := true

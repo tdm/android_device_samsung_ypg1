@@ -70,7 +70,7 @@ public abstract class PowerButton {
         BUTTONS.put(BUTTON_NETWORKMODE, NetworkModeButton.class);
         BUTTONS.put(BUTTON_AUTOROTATE, AutoRotateButton.class);
         BUTTONS.put(BUTTON_AIRPLANE, AirplaneButton.class);
-        BUTTONS.put(BUTTON_FLASHLIGHT, FlashlightButton.class);
+//        BUTTONS.put(BUTTON_FLASHLIGHT, FlashlightButton.class);
         BUTTONS.put(BUTTON_SLEEP, SleepButton.class);
         BUTTONS.put(BUTTON_MEDIA_PLAY_PAUSE, MediaPlayPauseButton.class);
         BUTTONS.put(BUTTON_MEDIA_PREVIOUS, MediaPreviousButton.class);
@@ -109,7 +109,7 @@ public abstract class PowerButton {
                     updateImageView(buttonIcon, mIcon);
 
                     int sColorMaskBase = Settings.System.getInt(context.getContentResolver(),
-                            Settings.System.EXPANDED_VIEW_WIDGET_COLOR, 0xFF8DE20D);
+                            Settings.System.EXPANDED_VIEW_WIDGET_COLOR, 0xFF33B5E5);
                     int sColorMaskOn    = (sColorMaskBase & 0x00FFFFFF) | 0xA0000000;
                     int sColorMaskOff   = (sColorMaskBase & 0x00FFFFFF) | 0x33000000;
                     int sColorMaskInter = (sColorMaskBase & 0x00FFFFFF) | 0x60000000;

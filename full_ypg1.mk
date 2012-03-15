@@ -1,30 +1,22 @@
-# Copyright (C) 2009 The Android Open Source Project
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 #
 # This file is the build configuration for a full Android
-# build for crespo hardware. This cleanly combines a set of
+# build for ypg1 hardware. This cleanly combines a set of
 # device-specific aspects (drivers) with a device-agnostic
 # product configuration (apps).
 #
 
+PRODUCT_PACKAGES := \
+	LiveWallpapersPicker
+
+PRODUCT_PACKAGES += \
+	Camera
+
 # Inherit from those products. Most specific first.
-$(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
+$(call inherit-product, $(SRC_TARGET_DIR)/product/full_base.mk)
 # This is where we'd set a backup provider if we had one
 #$(call inherit-product, device/sample/products/backup_overlay.mk)
-$(call inherit-product, device/samsung/ypg1/ypg1.mk)
-$(call inherit-product, $(SRC_TARGET_DIR)/product/full.mk)
+$(call inherit-product, device/samsung/ypg1/device.mk)
+
 
 # Screen density is actually considered a locale (since it is taken into account
 # the the build-time selection of resources). The product definitions including
@@ -33,8 +25,8 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/full.mk)
 PRODUCT_LOCALES += hdpi
 
 # Discard inherited values and use our own instead.
-PRODUCT_NAME := full_ypg1
 PRODUCT_DEVICE := ypg1
+PRODUCT_NAME := cm_ypg1
 PRODUCT_BRAND := Samsung
-PRODUCT_MANUFACTURER := Samsung
-PRODUCT_MODEL := YP-G1
+PRODUCT_MODEL := Galaxy Player 4.0
+PROUDCT_MANUFACTURER := Samsung

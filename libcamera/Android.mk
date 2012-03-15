@@ -1,21 +1,32 @@
-ifeq ($(TARGET_DEVICE),ypg1)
 LOCAL_PATH:= $(call my-dir)
-
 include $(CLEAR_VARS)
 
-LOCAL_SRC_FILES:= LibCameraWrapper.cpp
+# HAL module implemenation stored in
+# hw/<COPYPIX_HARDWARE_MODULE_ID>.<ro.product.board>.so
+LOCAL_MODULE_PATH := $(TARGET_OUT_SHARED_LIBRARIES)/hw
 
-LOCAL_SHARED_LIBRARIES:= libdl libutils libcutils libcamera_client
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/../include
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/../libs3cjpeg
 
-LOCAL_MODULE := libcamera
+LOCAL_SRC_FILES:= \
+	SecCamera.cpp \
+	SecCameraHWInterface.cpp \
+	SecCameraUtils.cpp \
+
+LOCAL_SHARED_LIBRARIES:= libutils libcutils libbinder liblog libcamera_client libhardware
+LOCAL_SHARED_LIBRARIES+= libs3cjpeg
+
+LOCAL_MODULE := camera.aries
+
 LOCAL_MODULE_TAGS := optional
-
-LOCAL_PRELINK_MODULE := false
 
 ifdef BOARD_SECOND_CAMERA_DEVICE
     LOCAL_CFLAGS += -DFFC_PRESENT
 endif
 
-include $(BUILD_SHARED_LIBRARY)
+ifeq ($(TARGET_DEVICE),fascinatemtd)
+    LOCAL_CFLAGS += -DHAVE_FLASH
 endif
+
+include $(BUILD_SHARED_LIBRARY)
 
