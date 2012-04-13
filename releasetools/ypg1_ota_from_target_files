@@ -38,13 +38,16 @@ __doc__ = ota_from_target_files.__doc__
 
 def CopyBootFiles(input_zip, output_zip):
     output_zip.write(os.path.join(TARGET_DIR, "kernel"),"kernel")
+    output_zip.write(os.path.join(TARGET_DIR, "kernel-XAA"),"kernel-XAA")
 
 def CopyUpdateTools(output_zip):
   """Copy the update utilities and scripts to the output."""
-  output_zip.write(os.path.join(UTILITIES_DIR, "make_ext4fs"),"make_ext4fs")
-  output_zip.write(os.path.join(UTILITIES_DIR, "busybox"),"busybox")
-  output_zip.write(os.path.join(UTILITIES_DIR, "flash_kernel"),"flash_kernel")
+#  output_zip.write(os.path.join(UTILITIES_DIR, "make_ext4fs"),"make_ext4fs")
+#  output_zip.write(os.path.join(UTILITIES_DIR, "busybox"),"busybox")
   output_zip.write(os.path.join(TARGET_DIR, "fsconvert.sh"),"fsconvert.sh")
+  output_zip.write(os.path.join(TARGET_DIR, "flash_kernel"),"flash_kernel")
+  output_zip.write(os.path.join(TARGET_DIR, "updatekernel.sh"),"updatekernel.sh")
+  output_zip.write(os.path.join(TARGET_DIR, "copyefsdata.sh"),"copyefsdata.sh")
 
 def WriteFullOTAPackage(input_zip, output_zip):
   # TODO: how to determine this?  We don't know what version it will
@@ -77,6 +80,8 @@ def WriteFullOTAPackage(input_zip, output_zip):
 
   script.ShowProgress(0.5, 0)
 
+  script.UpdateKernel()
+
   if OPTIONS.wipe_user_data:
     script.FormatPartition("/data")
 
@@ -92,6 +97,8 @@ def WriteFullOTAPackage(input_zip, output_zip):
   Item.Get("system").SetPermissions(script)
 
   script.ShowProgress(0.2, 0)
+
+  script.CopyEfsData()
 
   if OPTIONS.backuptool:
     script.ShowProgress(0.2, 10)

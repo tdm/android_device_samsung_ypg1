@@ -24,7 +24,7 @@ bml_unlock(const char* dev)
 }
 
 int
-bml_write(const char* dev, const char* imgname)
+bml_write(const char* dev, const char* img)
 {
     int rc = -1;
     int ifd = -1;
@@ -34,7 +34,7 @@ bml_write(const char* dev, const char* imgname)
     size_t tr, tw;
     char buf[BML_BLOCK_SIZE];
 
-    rc = stat(imgname, &st);
+    rc = stat(img, &st);
     if (rc != 0) {
         goto error;
     }
@@ -44,11 +44,11 @@ bml_write(const char* dev, const char* imgname)
     }
 
     printf("Writing image %s to device %s (%d bytes) ...\n",
-            imgname, dev, st.st_mode);
+            img, dev, st.st_mode);
 
-    ifd = open(imgname, O_RDONLY);
+    ifd = open(img, O_RDONLY);
     if (ifd < 0) {
-        fprintf(stderr, "Cannot open %s: %s\n", imgname, strerror(errno));
+        fprintf(stderr, "Cannot open %s: %s\n", img, strerror(errno));
         rc = -1;
         goto error;
     }
@@ -104,15 +104,21 @@ error:
 int
 main(int argc, char** argv)
 {
-    if (argc != 2) {
-        fprintf(stderr, "Usage: %s <image>\n", argv[0]);
+    const char* img;
+    const char* dev;
+
+    if (argc != 3) {
+        fprintf(stderr, "Usage: %s <kernel> <bmldev>\n", argv[0]);
         exit(1);
     }
-    if (bml_unlock("/dev/block/bml7") != 0) {
-        fprintf(stderr, "Cannot unlock bml\n");
+    img = argv[1];
+    dev = argv[2];
+
+    if (bml_unlock(dev) != 0) {
+        fprintf(stderr, "Cannot unlock bml device %s\n", dev);
         exit(1);
     }
-    if (bml_write("/dev/block/bml7", argv[1]) != 0) {
+    if (bml_write(dev, img) != 0) {
         fprintf(stderr, "Cannot write kernel\n");
         exit(1);
     }

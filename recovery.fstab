@@ -1,11 +1,11 @@
 # mount point	fstype		device
 
 /efs		rfs		/dev/block/stl3
-/system		ext3		/dev/block/stl9
-/dbdata		rfs		/dev/block/stl10
-/cache		rfs		/dev/block/stl11
+/system		yaffs2		factoryfs
+/dbdata		yaffs2		dbdatafs
+/cache		yaffs2		cache
 /sdcard		vfat		/dev/block/mmcblk0p1
-/data		rfs		/dev/block/mmcblk0p2
+/data		ext4		/dev/block/mmcblk0p2
 
 #/boot		mtd		boot
 #/recovery	mtd		recovery

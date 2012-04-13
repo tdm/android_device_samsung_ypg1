@@ -76,7 +76,8 @@ BOARD_NAND_PAGE_SIZE := 4096 -s 128
 BOARD_KERNEL_BASE := 0x02e00000
 BOARD_KERNEL_CMDLINE := console=ttyFIQ0,115200 init=/init no_console_suspend
 BOARD_KERNEL_PAGESIZE := 4096
-TARGET_PREBUILT_KERNEL := device/samsung/ypg1/kernel
+# We have two kernels, so this is disabled.  See device.mk.
+# TARGET_PREBUILT_KERNEL := device/samsung/ypg1/kernel
 
 # WIFI defines
 BOARD_WPA_SUPPLICANT_DRIVER := WEXT
@@ -94,6 +95,4 @@ BOARD_RECOVERY_HANDLES_MOUNT := true
 BOARD_USES_BML_OVER_MTD := false
 BOARD_CUSTOM_RECOVERY_KEYMAPPING:= ../../device/samsung/ypg1/recovery_ui.c
 BOARD_CUSTOM_BOOTIMG_MK := device/samsung/ypg1/shbootimg.mk
-TARGET_OTA_ASSERT_DEVICE := YP-G1
-
--include device/samsung/aries-common/bdaddr_read/Android.mk
+TARGET_OTA_ASSERT_DEVICE := YP-G1,ypg1
