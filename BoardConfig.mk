@@ -34,7 +34,7 @@ TARGET_PROVIDES_INIT_TARGET_RC := true
 TARGET_RECOVERY_INITRC := device/samsung/ypg1/recovery.rc
 
 # Provide our own libaudio
-#TARGET_PROVIDES_LIBAUDIO := true
+TARGET_PROVIDES_LIBAUDIO := true
 
 # Releasetools
 TARGET_RELEASETOOL_OTA_FROM_TARGET_SCRIPT := ./device/samsung/ypg1/releasetools/ypg1_ota_from_target_files
@@ -43,11 +43,15 @@ TARGET_RELEASETOOL_IMG_FROM_TARGET_SCRIPT := ./device/samsung/ypg1/releasetools/
 # Camera defines
 USE_CAMERA_STUB := false
 ifeq ($(USE_CAMERA_STUB),false)
+BOARD_SECOND_CAMERA_DEVICE := true
 BOARD_CAMERA_LIBRARIES := libcamera
 endif
 
 # OpenGL stuff
+USE_OPENGL_RENDERER := true
 BOARD_EGL_CFG := device/samsung/ypg1/prebuilt/etc/egl.cfg
+BOARD_CUSTOM_GRAPHICS := ../../../device/samsung/ypg1/recovery/graphics.c
+BOARD_USE_SKIA_LCDTEXT := true
 
 # Bluetooth
 BOARD_HAVE_BLUETOOTH := true
@@ -76,22 +80,30 @@ BOARD_NAND_PAGE_SIZE := 4096 -s 128
 BOARD_KERNEL_BASE := 0x02e00000
 BOARD_KERNEL_CMDLINE := console=ttyFIQ0,115200 init=/init no_console_suspend
 BOARD_KERNEL_PAGESIZE := 4096
-TARGET_PREBUILT_KERNEL := device/samsung/ypg1/kernel
+# We have two kernels, so this is disabled.  See device.mk.
+# TARGET_PREBUILT_KERNEL := device/samsung/ypg1/kernel
+# XXX: fix this
+KERNEL_SAMSUNG_HACK := true
 
 # WIFI defines
+WPA_SUPPLICANT_VERSION := VER_0_8_X
+BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_wext
 BOARD_WPA_SUPPLICANT_DRIVER := WEXT
-WPA_SUPPLICANT_VERSION := VER_0_6_X
 BOARD_WLAN_DEVICE := bcm4329
+WIFI_DRIVER_MODULE_PATH := "/lib/modules/dhd.ko"
 WIFI_DRIVER_FW_STA_PATH := "/system/etc/wifi/bcm4329_sta.bin"
 WIFI_DRIVER_FW_AP_PATH := "/system/etc/wifi/bcm4329_aps.bin"
-WIFI_DRIVER_MODULE_PATH := "/lib/modules/dhd.ko"
 WIFI_DRIVER_MODULE_ARG := "firmware_path=/system/etc/wifi/bcm4329_sta.bin nvram_path=/system/etc/wifi/nvram_net.txt"
 WIFI_DRIVER_MODULE_NAME := "dhd"
+
+# USB MTP / UMS
+SAMSUNG_USB_MTP_DEVICE := true
+TARGET_USE_CUSTOM_LUN_FILE_PATH := /sys/devices/platform/usb_mass_storage/lun0/file
 
 # Recovery
 TARGET_USERIMAGES_USE_EXT4 := true
 BOARD_RECOVERY_HANDLES_MOUNT := true
-BOARD_USES_BML_OVER_MTD := false
+BOARD_USES_BML_OVER_MTD := true
 #BOARD_CUSTOM_RECOVERY_KEYMAPPING:= ../../device/samsung/ypg1/recovery_ui.c
 BOARD_CUSTOM_BOOTIMG_MK := device/samsung/ypg1/shbootimg.mk
 TARGET_OTA_ASSERT_DEVICE := YP-G1,ypg1

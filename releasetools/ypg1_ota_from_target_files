@@ -41,10 +41,10 @@ def CopyBootFiles(input_zip, output_zip):
 
 def CopyUpdateTools(output_zip):
   """Copy the update utilities and scripts to the output."""
-  output_zip.write(os.path.join(UTILITIES_DIR, "make_ext4fs"),"make_ext4fs")
   output_zip.write(os.path.join(UTILITIES_DIR, "busybox"),"busybox")
-  output_zip.write(os.path.join(UTILITIES_DIR, "flash_kernel"),"flash_kernel")
-  output_zip.write(os.path.join(TARGET_DIR, "fsconvert.sh"),"fsconvert.sh")
+  output_zip.write(os.path.join(UTILITIES_DIR, "make_ext4fs"),"make_ext4fs")
+  output_zip.write(os.path.join(TARGET_DIR, "convert_to_mtd.sh"),"convert_to_mtd.sh")
+  output_zip.write(os.path.join(TARGET_DIR, "bdaddr_read.sh"),"bdaddr_read.sh")
 
 def WriteFullOTAPackage(input_zip, output_zip):
   # TODO: how to determine this?  We don't know what version it will
@@ -77,6 +77,9 @@ def WriteFullOTAPackage(input_zip, output_zip):
 
   script.ShowProgress(0.5, 0)
 
+  script.UpdateKernel()
+  script.ConvertToMtd()
+
   if OPTIONS.wipe_user_data:
     script.FormatPartition("/data")
 
@@ -96,6 +99,8 @@ def WriteFullOTAPackage(input_zip, output_zip):
   Item.Get("system").SetPermissions(script)
 
   script.ShowProgress(0.2, 0)
+
+  script.BdAddrRead()
 
   if OPTIONS.backuptool:
     script.ShowProgress(0.2, 10)

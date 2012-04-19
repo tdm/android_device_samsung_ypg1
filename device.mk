@@ -19,6 +19,9 @@
 # application settings that are stored in resourced.
 
 
+PRODUCT_INSTALL_PACKAGES := \
+	vendor/google/gapps-20120317
+
 DEVICE_PACKAGE_OVERLAYS := device/samsung/ypg1/overlay
 
 
@@ -68,19 +71,20 @@ PRODUCT_PACKAGES := \
     cypress-touchkey.kcm \
     s3c-keypad.kcm
 
-# Audio
-PRODUCT_COPY_FILES += \
-        device/samsung/ypg1/audio/liba2dp.so:system/lib/liba2dp.so \
-        device/samsung/ypg1/audio/libasound.so:system/lib/libasound.so \
-        device/samsung/ypg1/audio/libaudio.so:system/lib/libaudio.so \
-        device/samsung/ypg1/audio/libaudiohw_op.so:system/lib/libaudiohw_op.so \
-        device/samsung/ypg1/audio/libaudiohw_sf.so:system/lib/libaudiohw_sf.so \
-        device/samsung/ypg1/audio/liblvvefs.so:system/lib/liblvvefs.so \
-        device/samsung/ypg1/audio/lib_Samsung_Sound_Booster_Handphone.so:system/lib/lib_Samsung_Sound_Booster_Handphone.so \
-        device/samsung/ypg1/audio/lib_Samsung_Resampler.so:system/lib/lib_Samsung_Resampler.so \
-        device/samsung/ypg1/audio/libsamsungSoundbooster.so:system/lib/libsamsungSoundbooster.so \
-        device/samsung/ypg1/audio/libsec-ril.so:system/lib/libsec-ril.so \
-        device/samsung/ypg1/audio/libsecril-client.so:system/lib/libsecril-client.so
+## Audio
+#PRODUCT_COPY_FILES += \
+#        device/samsung/ypg1/audio/liba2dp.so:out/target/product/ypg1/obj/lib/liba2dp.so \
+#        device/samsung/ypg1/audio/liba2dp.so:system/lib/liba2dp.so \
+#        device/samsung/ypg1/audio/libasound.so:system/lib/libasound.so \
+#        device/samsung/ypg1/audio/libaudio.so:system/lib/libaudio.so \
+#        device/samsung/ypg1/audio/libaudiohw_op.so:system/lib/libaudiohw_op.so \
+#        device/samsung/ypg1/audio/libaudiohw_sf.so:system/lib/libaudiohw_sf.so \
+#        device/samsung/ypg1/audio/liblvvefs.so:system/lib/liblvvefs.so \
+#        device/samsung/ypg1/audio/lib_Samsung_Sound_Booster_Handphone.so:system/lib/lib_Samsung_Sound_Booster_Handphone.so \
+#        device/samsung/ypg1/audio/lib_Samsung_Resampler.so:system/lib/lib_Samsung_Resampler.so \
+#        device/samsung/ypg1/audio/libsamsungSoundbooster.so:system/lib/libsamsungSoundbooster.so \
+#        device/samsung/ypg1/audio/libsec-ril.so:system/lib/libsec-ril.so \
+#        device/samsung/ypg1/audio/libsecril-client.so:system/lib/libsecril-client.so
 
 # These are the OpenMAX IL configuration files
 PRODUCT_COPY_FILES += \
@@ -100,14 +104,14 @@ PRODUCT_PACKAGES += \
     sensors.s5pc110 \
     libstagefrighthw \
     libcamera \
+    camera.s5pc110 \
     overlay.s5pc110 \
-    audio.primary.s5pc110
+    audio.primary.s5pc110 \
+    hwcomposer.s5pc110
 
 # update utilities
 PRODUCT_PACKAGES += \
-	flashkernel
-
-OTATOOLS += $(HOST_OUT_EXECUTABLES)/flash_kernel
+	flash_kernel
 
 # Camera
 PRODUCT_PACKAGES += \
@@ -187,19 +191,14 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_TAGS += dalvik.gc.type-precise
 
 # We are using a prebuilt kernel for now, to ease building. This will be changed later.
-ifeq ($(TARGET_PREBUILT_KERNEL),)
-    LOCAL_KERNEL := device/samsung/ypg1/kernel
-else
-    LOCAL_KERNEL := $(TARGET_PREBUILT_KERNEL)
-endif
-
 PRODUCT_COPY_FILES += \
-    $(LOCAL_KERNEL):kernel \
+    device/samsung/ypg1/kernel-ypg1-cm9.bin:kernel \
     device/samsung/ypg1/recovery.bin:recovery.bin
 
-# copy the filesystem converter
+# Install scripts
 PRODUCT_COPY_FILES += \
-  device/samsung/ypg1/fsconvert.sh:fsconvert.sh
+    device/samsung/ypg1/convert_to_mtd.sh:convert_to_mtd.sh \
+    device/samsung/ypg1/bdaddr_read.sh:bdaddr_read.sh
 
 # See comment at the top of this file. This is where the other
 # half of the device-specific product definition file takes care

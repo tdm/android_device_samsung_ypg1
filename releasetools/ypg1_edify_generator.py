@@ -22,38 +22,44 @@ VENDOR_SAMSUNG_DIR = os.path.abspath(os.path.join(LOCAL_DIR, '../../../vendor/sa
 import edify_generator
 
 class EdifyGenerator(edify_generator.EdifyGenerator):
-    def AssertDevice(self, device):
-      edify_generator.EdifyGenerator.AssertDevice(self, device)
-
-#      self.script.append('ui_print("Checking state of filesystems...");')
-#
-#      self.script.append(
-#            ('package_extract_file("make_ext4fs", "/tmp/make_ext4fs");\n'
-#             'set_perm(0, 0, 0755, "/tmp/make_ext4fs");'))
-#
-#      self.script.append(
-#            ('package_extract_file("busybox", "/tmp/busybox");\n'
-#             'set_perm(0, 0, 0755, "/tmp/busybox");'))
-#
-#      self.script.append(
-#            ('package_extract_file("fsconvert.sh", "/tmp/fsconvert.sh");\n'
-#             'set_perm(0, 0, 0755, "/tmp/fsconvert.sh");'))
-#
-#      self.script.append('assert(run_program("/tmp/fsconvert.sh") == 0);')
+    def UpdateKernel(self):
+      self.script.append('ui_print("Updating kernel...");')
 
       self.script.append('package_extract_file("kernel", "/tmp/kernel");')
 
       self.script.append(
-            ('package_extract_file("flash_kernel", "/tmp/flash_kernel");\n'
+            ('package_extract_file("system/bin/flash_kernel", "/tmp/flash_kernel");\n'
              'set_perm(0, 0, 0755, "/tmp/flash_kernel");'))
 
       self.script.append('assert(run_program("/tmp/flash_kernel", "/tmp/kernel") == 0);')
+
+    def ConvertToMtd(self):
+      self.script.append('ui_print("Converting to mtd...");')
+
+      self.script.append(
+            ('package_extract_file("busybox", "/tmp/busybox");\n'
+             'set_perm(0, 0, 0755, "/tmp/busybox");'))
+
+      self.script.append(
+            ('package_extract_file("system/bin/erase_image", "/tmp/erase_image");\n'
+             'set_perm(0, 0, 0755, "/tmp/erase_image");'))
 
       self.script.append(
             ('package_extract_file("make_ext4fs", "/tmp/make_ext4fs");\n'
              'set_perm(0, 0, 0755, "/tmp/make_ext4fs");'))
 
-      self.script.append('assert(run_program("/tmp/make_ext4fs", "/dev/block/stl9") == 0);')
+      self.script.append(
+            ('package_extract_file("convert_to_mtd.sh", "/tmp/convert_to_mtd.sh");\n'
+             'set_perm(0, 0, 0755, "/tmp/convert_to_mtd.sh");'))
+
+      self.script.append('assert(run_program("/tmp/convert_to_mtd.sh") == 0);')
+
+    def BdAddrRead(self):
+      self.script.append(
+            ('package_extract_file("bdaddr_read.sh", "/tmp/bdaddr_read.sh");\n'
+             'set_perm(0, 0, 0755, "/tmp/bdaddr_read.sh");'))
+
+      self.script.append('assert(run_program("/tmp/bdaddr_read.sh") == 0);')
 
     def RunBackup(self, command):
       edify_generator.EdifyGenerator.RunBackup(self, command)
